@@ -3,6 +3,11 @@ package io.github.kaitosiba.fujiptp.camera
 import io.github.kaitosiba.fujiptp.ptp.PtpDeviceInfo
 import io.github.kaitosiba.fujiptp.ptp.PtpObjectFormat
 import io.github.kaitosiba.fujiptp.ptp.PtpObjectInfo
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 /** どの PTP カメラにも当てはまる既定の振る舞い。 */
 open class GenericPtpProfile : CameraProfile {
@@ -38,6 +43,12 @@ open class GenericPtpProfile : CameraProfile {
     override fun shotKey(info: PtpObjectInfo): String =
         "${info.storageId}:${info.parent}:${info.name.substringBeforeLast('.').uppercase()}"
 
+    override fun hasPtpThumbnail(kind: MediaKind): Boolean = kind != MediaKind.FOLDER
+
+    override fun captureWallClock(info: PtpObjectInfo, hostZone: ZoneId): LocalDateTime? =
+        info.dateCreatedMillis.takeIf { it > 0 }
+            ?.let { LocalDateTime.ofInstant(Instant.ofEpochMilli(it), hostZone) }
+
     override val previewStrategy: PreviewStrategy = PreviewStrategy.PTP_THUMBNAIL
     override val transport: TransportPreference = TransportPreference.FRAMEWORK
     override val clockPolicy: CameraClockPolicy = CameraClockPolicy(writesExifOffsetTime = null)
@@ -69,6 +80,20 @@ open class FujifilmProfile : GenericPtpProfile() {
         return if (byVendor || byName) 50 else 0
     }
 
+    override fun classify(info: PtpObjectInfo): MediaKind =
+        if (info.format == FORMAT_RAF) MediaKind.RAW else super.classify(info)
+
+    /** 動画（MOV）は GetThumb が失敗する（X100VI FW1.32 で確認） */
+    override fun hasPtpThumbnail(kind: MediaKind): Boolean =
+        kind != MediaKind.VIDEO && super.hasPtpThumbnail(kind)
+
+    /**
+     * Fujifilm は ObjectInfo の Keywords にカメラ時計の日時文字列（例: "20260922T052736"）を入れてくるので、
+     * 端末 TZ の影響を受けないそちらを優先する。
+     */
+    override fun captureWallClock(info: PtpObjectInfo, hostZone: ZoneId): LocalDateTime? =
+        info.keywords?.let { parsePtpDateTime(it) } ?: super.captureWallClock(info, hostZone)
+
     override val connectionGuide: ConnectionGuide = ConnectionGuide(
         steps = listOf(
             "カメラの MENU →「ネットワーク/USB設定」→「PC接続モード」を「USBカードリーダー」にする",
@@ -80,13 +105,38 @@ open class FujifilmProfile : GenericPtpProfile() {
 
     companion object {
         const val FUJIFILM_VENDOR_ID: Int = 0x04CB
+
+        /** RAF のベンダー ObjectFormat コード（X100VI FW1.32 で確認） */
+        const val FORMAT_RAF: Int = 0xB103
+
+        private val ptpDateTime: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss")
+
+        /** PTP の日時文字列（"YYYYMMDDThhmmss[.s][Z|±hhmm]"）の先頭 15 文字を壁時計時刻として読む */
+        fun parsePtpDateTime(text: String): LocalDateTime? {
+            if (text.length < 15) return null
+            return try {
+                LocalDateTime.parse(text.substring(0, 15), ptpDateTime)
+            } catch (e: DateTimeParseException) {
+                null
+            }
+        }
     }
 }
 
-/** FUJIFILM X100VI。値の多くは M0 の実機診断で確定させる。 */
+/**
+ * FUJIFILM X100VI。
+ *
+ * FW1.32 の実機診断（fixtures/dumps/x100vi-fw132.json）で確認した内容:
+ * USB PID 0x0305、RAF は ObjectFormat 0xB103、GetPartialObject 対応、全階層の一覧取得可、
+ * JPEG / RAF は GetThumb 可・MOV は不可、EXIF に OffsetTimeOriginal あり。
+ */
 object FujifilmX100VIProfile : FujifilmProfile() {
     override val id: String = "fujifilm.x100vi"
     override val displayName: String = "FUJIFILM X100VI"
+    override val verified: Boolean = true
+    override val clockPolicy: CameraClockPolicy = CameraClockPolicy(writesExifOffsetTime = true)
+
+    const val USB_PRODUCT_ID: Int = 0x0305
 
     override fun match(usb: UsbIdentity?, info: PtpDeviceInfo?): Int {
         if (super.match(usb, info) == 0) return 0

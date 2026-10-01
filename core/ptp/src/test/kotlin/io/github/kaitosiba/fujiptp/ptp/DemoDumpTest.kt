@@ -6,7 +6,6 @@ import io.github.kaitosiba.fujiptp.ptp.dump.ProbeStatus
 import io.github.kaitosiba.fujiptp.ptp.fake.FakePtpClient
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -26,8 +25,9 @@ class DemoDumpTest {
 
         val result = DiagnosticsRunner(FakePtpClient(dump), tmp.newFolder())
             .run(source = "demo", createdAt = dump.createdAt)
-        val failed = result.probes.filter { it.status == ProbeStatus.FAILED }
-        assertTrue("failed probes: $failed", failed.isEmpty())
+        // 動画の GetThumb 失敗は実機（X100VI FW1.32）と同じ挙動
+        val failed = result.probes.filter { it.status == ProbeStatus.FAILED }.map { it.id }
+        assertEquals(listOf("thumb-mov"), failed)
         assertEquals(dump.storages.single().objects.size, result.storages.single().objects.size)
     }
 }

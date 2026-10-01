@@ -290,26 +290,49 @@ flowchart LR
 
 | # | 内容 | 完了条件 |
 |---|---|---|
-| M0 | プロジェクト雛形 + 診断画面（スパイク） | X100VI を繋いで DeviceInfo/ObjectInfo がダンプできる。§11 の確認事項が埋まる（**実装済み・実機確認待ち**） |
+| M0 | プロジェクト雛形 + 診断画面（スパイク） | X100VI を繋いで DeviceInfo/ObjectInfo がダンプできる。§11 の確認事項が埋まる（**完了**） |
 | M1 | 接続・一覧・サムネイル | 実機で日付グリッドが表示される |
 | M2 | プレビュー・選択・ダウンロード・取込済み管理 | **MVP 完了** |
 | M3 | GPX 読み込み・マッチングの dry run 表示 | 地図上で付与予定位置が確認できる |
 | M4 | ジオタグ書き込み（JPEG EXIF / XMP サイドカー） | |
 | M5 | 他機種プロファイル追加 / 必要なら RawUsbPtpClient | |
 
-## 11. 実機で確認が必要な事項（M0 で潰す）
+## 11. 実機で確認した事項（M0）
 
-| 項目 | 影響先 |
-|---|---|
-| X100VI の「PC接続モード」のどれで PTP として見えるか（「USBカードリーダー」想定） | `connectionGuide` |
-| USB PID、`DeviceInfo.model` の文字列 | `match()` |
-| RAF / HEIF の ObjectFormat コード | `classify()` |
-| RAF / HEIF / 動画に対して GetThumb が JPEG を返すか | `previewStrategy` |
-| GetPartialObject 対応可否 | ダウンロード方式（進捗粒度・再開） |
-| ObjectInfo の CaptureDate が入っているか | 一覧の日付グルーピング |
-| EXIF に OffsetTimeOriginal を書くか | `clockPolicy` |
-| 転送速度、オートパワーオフ・スリープ時の挙動 | UX（警告表示など） |
-| Android 端末側のシステムアプリ（ファイル/写真の取り込み）がデバイスを掴まないか | 接続手順の案内 |
+X100VI FW1.32 + Nothing Phone (A024, Android 16) での診断結果（`fixtures/dumps/x100vi-fw132.json`）。
+
+| 項目 | 結果 | 反映先 |
+|---|---|---|
+| PC接続モード | 未記録（要確認） | `connectionGuide` |
+| USB ID / `DeviceInfo.model` | VID `0x04CB` / PID `0x0305`、model `"X100VI"`、USB 2.0 High Speed（bulk 512B） | `match()` |
+| ObjectFormat コード | JPEG `0x3801`、RAF `0xB103`（ベンダー）、MOV `0x300D`。HEIF は未確認（カードに無し） | `classify()` |
+| GetThumb | JPEG・RAF は 160×120 の JPEG が返る（数 ms）。MOV は失敗 | `hasPtpThumbnail()` |
+| GetPartialObject | 対応。RAF ヘッダ・JPEG 先頭の部分読み OK | バイト単位の進捗・再開が可能 |
+| 全階層の一覧取得 | GetObjectHandles(parent=ALL) で 1659 件を 5 ms で取得。構成は `DCIM/100_FUJI/` | `Quirk` 不要 |
+| ObjectInfo 取得 | 21 ms/件。1659 件の全件取得で約 35 秒 | §11.1 |
+| ObjectInfo の日時 | 全件にあり。ただし EXIF の撮影時刻と数十秒ずれるものがある。Keywords にカメラ時計の日時文字列が入る | `captureWallClock()` |
+| EXIF の TZ | `OffsetTimeOriginal` あり（例: `+09:00`）、`SubSecTimeOriginal` あり | `clockPolicy`、ジオタグの時刻正規化 |
+| 転送速度 | GetObject で約 22 MiB/s（JPEG 12 MiB: 0.5 秒、RAF 83 MiB: 3.8 秒） | 進捗 UI |
+| ベンダーオペレーション | `0x900C` / `0x900D` / `0x901D`（用途未調査） | 今は使わない |
+| MTP 拡張 | GetObjectPropList (`0x9805`) 対応 | §11.1 |
+| オートパワーオフ・スリープ | 未確認 | UX |
+| システムアプリによる占有 | 今回は発生せず | 接続手順の案内 |
+
+### 11.1 一覧取得の速度
+
+ObjectInfo を 1 件ずつ取ると、1659 件で約 35 秒かかる。M1 では次の方針で対応する。
+
+1. 一覧は取得できた順に画面へ流す（§7.2 のとおり）
+2. 取得した ObjectInfo を `StableObjectId` で永続キャッシュし、再接続時は差分（新しいハンドル）だけ取得する
+3. それでも遅ければ、MTP の GetObjectPropList（`0x9805`）で一括取得する。
+   `android.mtp.MtpDevice` には API がないため、`RawUsbPtpClient` の実装が必要になる
+
+### 11.2 日時の扱い
+
+- `android.mtp` は ObjectInfo の日時文字列（TZ なし）を端末の TZ で解釈する。カメラとスマホの TZ が違うと、日付グルーピングがずれる
+  - 今回の例: カメラは `+09:00`、スマホは `America/Vancouver`
+- Fujifilm は ObjectInfo の Keywords にカメラ時計の日時文字列を入れてくるので、グルーピングにはそれを使う（`FujifilmProfile.captureWallClock`）
+- ObjectInfo の日時は EXIF の撮影時刻と一致しないことがある。ジオタグには必ず EXIF の `DateTimeOriginal` + `OffsetTimeOriginal` を使う
 
 ## 12. 実装メモ
 
