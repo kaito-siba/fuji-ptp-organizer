@@ -5,10 +5,11 @@ plugins {
 
 android {
     namespace = "io.github.kaitosiba.fujiptp.ptp.android"
-    compileSdk = 36
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    buildToolsVersion = libs.versions.android.buildTools.get()
 
     defaultConfig {
-        minSdk = 29
+        minSdk = libs.versions.android.minSdk.get().toInt()
     }
 
     compileOptions {

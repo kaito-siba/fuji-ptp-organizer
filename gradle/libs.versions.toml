@@ -1,4 +1,10 @@
 [versions]
+# Android SDK のバージョン。flake.nix の devShell もここを読んで SDK を組み立てる
+android-compileSdk = "36"
+android-targetSdk = "36"
+android-minSdk = "29"
+android-buildTools = "35.0.0"
+
 agp = "8.13.0"
 kotlin = "2.2.21"
 coroutines = "1.10.2"

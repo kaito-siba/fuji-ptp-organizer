@@ -17,5 +17,11 @@ keystore.properties
 *.jks
 *.keystore
 
+# Nix / direnv
+result
+result-*
+.direnv/
+.envrc
+
 # OS
 .DS_Store

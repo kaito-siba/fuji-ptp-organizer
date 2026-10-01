@@ -8,6 +8,23 @@
 
 リポジトリのルートを Android Studio で開き、Gradle Sync を実行すればビルドできる。
 
+### NixOS の場合
+
+`flake.nix` に Android SDK・JDK 17・adb を揃えた devShell を用意してある。
+
+```sh
+nix develop                     # 初回は flake.lock が生成されるのでコミットしておく
+./gradlew :app:assembleDebug    # APK: app/build/outputs/apk/debug/app-debug.apk
+./gradlew :app:installDebug     # adb で繋いだ端末にインストール
+```
+
+- SDK のバージョン（compileSdk、build-tools）は `gradle/libs.versions.toml` の `android-*` を flake も読んでいる。
+  変えるときはそこだけ直せばいい
+- AGP が Maven から取ってくる aapt2 は NixOS では動かないため、devShell が `GRADLE_OPTS` で SDK 内の aapt2 を使わせている
+- Android SDK は unfree なので、flake 内で `allowUnfree` とライセンス同意を有効にしている
+- direnv を使うなら `.envrc` に `use flake` と書けば自動で入れる（`.envrc` は gitignore 済み）
+- adb は Wi-Fi 経由（後述のワイヤレスデバッグ）なら追加設定は不要。USB 接続で使う場合は NixOS 側で udev ルールの設定が必要
+
 ### ツールチェーンのバージョン
 
 `gradle/libs.versions.toml` で管理している。M0 の雛形は Google Maven を参照できない環境で書いたため、
