@@ -4,9 +4,9 @@
   "source": "demo",
   "usb": {
     "vendorId": 1227,
-    "productId": 0,
-    "manufacturerName": "FUJIFILM",
-    "productName": "X100VI (demo)",
+    "productId": 773,
+    "productName": "USB PTP Camera",
+    "version": "1.32",
     "interfaces": [
       {
         "id": 0,
@@ -14,7 +14,29 @@
         "interfaceClass": 6,
         "interfaceSubclass": 1,
         "interfaceProtocol": 1,
-        "endpoints": []
+        "endpoints": [
+          {
+            "address": 1,
+            "type": 2,
+            "direction": 0,
+            "maxPacketSize": 512,
+            "interval": 1
+          },
+          {
+            "address": 129,
+            "type": 2,
+            "direction": 128,
+            "maxPacketSize": 512,
+            "interval": 0
+          },
+          {
+            "address": 130,
+            "type": 3,
+            "direction": 128,
+            "maxPacketSize": 32,
+            "interval": 11
+          }
+        ]
       }
     ]
   },
@@ -35,23 +57,36 @@
       4105,
       4106,
       4107,
+      4108,
+      4109,
+      4111,
       4116,
       4117,
       4118,
-      4123
+      4123,
+      36876,
+      36877,
+      36893,
+      38913,
+      38914,
+      38915,
+      38917
     ],
     "eventsSupported": [
       16386,
       16387,
       16388,
-      16389
+      16389,
+      16390,
+      16392,
+      16393
     ]
   },
   "storages": [
     {
       "info": {
-        "storageId": 65537,
-        "description": "SD (demo)",
+        "storageId": 268435457,
+        "description": "External Memory (demo)",
         "volumeIdentifier": null,
         "maxCapacity": 137438953472,
         "freeSpace": 103079215104
@@ -61,7 +96,7 @@
       "objects": [
         {
           "handle": 1,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 12289,
           "compressedSize": 0,
           "thumbFormat": 0,
@@ -72,11 +107,12 @@
           "parent": 0,
           "name": "DCIM",
           "dateCreatedMillis": 1789862400000,
-          "dateModifiedMillis": 1789862400000
+          "dateModifiedMillis": 1789862400000,
+          "keywords": "20260920T090000"
         },
         {
           "handle": 2,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 12289,
           "compressedSize": 0,
           "thumbFormat": 0,
@@ -87,14 +123,15 @@
           "parent": 1,
           "name": "100_FUJI",
           "dateCreatedMillis": 1789862400000,
-          "dateModifiedMillis": 1789862400000
+          "dateModifiedMillis": 1789862400000,
+          "keywords": "20260920T090000"
         },
         {
           "handle": 100,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -102,14 +139,15 @@
           "parent": 2,
           "name": "DSCF0001.JPG",
           "dateCreatedMillis": 1789862820000,
-          "dateModifiedMillis": 1789862820000
+          "dateModifiedMillis": 1789862820000,
+          "keywords": "20260920T090700"
         },
         {
           "handle": 101,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -117,14 +155,15 @@
           "parent": 2,
           "name": "DSCF0002.JPG",
           "dateCreatedMillis": 1789863240000,
-          "dateModifiedMillis": 1789863240000
+          "dateModifiedMillis": 1789863240000,
+          "keywords": "20260920T091400"
         },
         {
           "handle": 102,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -132,14 +171,15 @@
           "parent": 2,
           "name": "DSCF0003.JPG",
           "dateCreatedMillis": 1789863660000,
-          "dateModifiedMillis": 1789863660000
+          "dateModifiedMillis": 1789863660000,
+          "keywords": "20260920T092100"
         },
         {
           "handle": 103,
-          "storageId": 65537,
-          "format": 12288,
-          "compressedSize": 41000000,
-          "thumbFormat": 14337,
+          "storageId": 268435457,
+          "format": 45315,
+          "compressedSize": 86000000,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -147,14 +187,15 @@
           "parent": 2,
           "name": "DSCF0003.RAF",
           "dateCreatedMillis": 1789863660000,
-          "dateModifiedMillis": 1789863660000
+          "dateModifiedMillis": 1789863660000,
+          "keywords": "20260920T092100"
         },
         {
           "handle": 104,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -162,14 +203,15 @@
           "parent": 2,
           "name": "DSCF0004.JPG",
           "dateCreatedMillis": 1789864080000,
-          "dateModifiedMillis": 1789864080000
+          "dateModifiedMillis": 1789864080000,
+          "keywords": "20260920T092800"
         },
         {
           "handle": 105,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 12288,
           "compressedSize": 9800000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -177,14 +219,15 @@
           "parent": 2,
           "name": "DSCF0005.HIF",
           "dateCreatedMillis": 1789864500000,
-          "dateModifiedMillis": 1789864500000
+          "dateModifiedMillis": 1789864500000,
+          "keywords": "20260920T093500"
         },
         {
           "handle": 106,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -192,14 +235,15 @@
           "parent": 2,
           "name": "DSCF0006.JPG",
           "dateCreatedMillis": 1789864920000,
-          "dateModifiedMillis": 1789864920000
+          "dateModifiedMillis": 1789864920000,
+          "keywords": "20260920T094200"
         },
         {
           "handle": 107,
-          "storageId": 65537,
-          "format": 12288,
-          "compressedSize": 41000000,
-          "thumbFormat": 14337,
+          "storageId": 268435457,
+          "format": 45315,
+          "compressedSize": 86000000,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -207,14 +251,15 @@
           "parent": 2,
           "name": "DSCF0006.RAF",
           "dateCreatedMillis": 1789864920000,
-          "dateModifiedMillis": 1789864920000
+          "dateModifiedMillis": 1789864920000,
+          "keywords": "20260920T094200"
         },
         {
           "handle": 108,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -222,14 +267,15 @@
           "parent": 2,
           "name": "DSCF0007.JPG",
           "dateCreatedMillis": 1789865340000,
-          "dateModifiedMillis": 1789865340000
+          "dateModifiedMillis": 1789865340000,
+          "keywords": "20260920T094900"
         },
         {
           "handle": 109,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -237,14 +283,15 @@
           "parent": 2,
           "name": "DSCF0008.JPG",
           "dateCreatedMillis": 1789865760000,
-          "dateModifiedMillis": 1789865760000
+          "dateModifiedMillis": 1789865760000,
+          "keywords": "20260920T095600"
         },
         {
           "handle": 110,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -252,14 +299,15 @@
           "parent": 2,
           "name": "DSCF0009.JPG",
           "dateCreatedMillis": 1789866180000,
-          "dateModifiedMillis": 1789866180000
+          "dateModifiedMillis": 1789866180000,
+          "keywords": "20260920T100300"
         },
         {
           "handle": 111,
-          "storageId": 65537,
-          "format": 12288,
-          "compressedSize": 41000000,
-          "thumbFormat": 14337,
+          "storageId": 268435457,
+          "format": 45315,
+          "compressedSize": 86000000,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -267,14 +315,15 @@
           "parent": 2,
           "name": "DSCF0009.RAF",
           "dateCreatedMillis": 1789866180000,
-          "dateModifiedMillis": 1789866180000
+          "dateModifiedMillis": 1789866180000,
+          "keywords": "20260920T100300"
         },
         {
           "handle": 112,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 12288,
           "compressedSize": 9800000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -282,14 +331,15 @@
           "parent": 2,
           "name": "DSCF0010.HIF",
           "dateCreatedMillis": 1789866600000,
-          "dateModifiedMillis": 1789866600000
+          "dateModifiedMillis": 1789866600000,
+          "keywords": "20260920T101000"
         },
         {
           "handle": 113,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -297,14 +347,15 @@
           "parent": 2,
           "name": "DSCF0011.JPG",
           "dateCreatedMillis": 1789867020000,
-          "dateModifiedMillis": 1789867020000
+          "dateModifiedMillis": 1789867020000,
+          "keywords": "20260920T101700"
         },
         {
           "handle": 114,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -312,14 +363,15 @@
           "parent": 2,
           "name": "DSCF0012.JPG",
           "dateCreatedMillis": 1789867440000,
-          "dateModifiedMillis": 1789867440000
+          "dateModifiedMillis": 1789867440000,
+          "keywords": "20260920T102400"
         },
         {
           "handle": 115,
-          "storageId": 65537,
-          "format": 12288,
-          "compressedSize": 41000000,
-          "thumbFormat": 14337,
+          "storageId": 268435457,
+          "format": 45315,
+          "compressedSize": 86000000,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -327,14 +379,15 @@
           "parent": 2,
           "name": "DSCF0012.RAF",
           "dateCreatedMillis": 1789867440000,
-          "dateModifiedMillis": 1789867440000
+          "dateModifiedMillis": 1789867440000,
+          "keywords": "20260920T102400"
         },
         {
           "handle": 116,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -342,14 +395,15 @@
           "parent": 2,
           "name": "DSCF0013.JPG",
           "dateCreatedMillis": 1789867860000,
-          "dateModifiedMillis": 1789867860000
+          "dateModifiedMillis": 1789867860000,
+          "keywords": "20260920T103100"
         },
         {
           "handle": 117,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -357,14 +411,15 @@
           "parent": 2,
           "name": "DSCF0014.JPG",
           "dateCreatedMillis": 1789954680000,
-          "dateModifiedMillis": 1789954680000
+          "dateModifiedMillis": 1789954680000,
+          "keywords": "20260921T103800"
         },
         {
           "handle": 118,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 12288,
           "compressedSize": 9800000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -372,14 +427,15 @@
           "parent": 2,
           "name": "DSCF0015.HIF",
           "dateCreatedMillis": 1789955100000,
-          "dateModifiedMillis": 1789955100000
+          "dateModifiedMillis": 1789955100000,
+          "keywords": "20260921T104500"
         },
         {
           "handle": 119,
-          "storageId": 65537,
-          "format": 12288,
-          "compressedSize": 41000000,
-          "thumbFormat": 14337,
+          "storageId": 268435457,
+          "format": 45315,
+          "compressedSize": 86000000,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -387,14 +443,15 @@
           "parent": 2,
           "name": "DSCF0015.RAF",
           "dateCreatedMillis": 1789955100000,
-          "dateModifiedMillis": 1789955100000
+          "dateModifiedMillis": 1789955100000,
+          "keywords": "20260921T104500"
         },
         {
           "handle": 120,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -402,14 +459,15 @@
           "parent": 2,
           "name": "DSCF0016.JPG",
           "dateCreatedMillis": 1789955520000,
-          "dateModifiedMillis": 1789955520000
+          "dateModifiedMillis": 1789955520000,
+          "keywords": "20260921T105200"
         },
         {
           "handle": 121,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 12301,
           "compressedSize": 350000000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 0,
@@ -417,14 +475,15 @@
           "parent": 2,
           "name": "DSCF0017.MOV",
           "dateCreatedMillis": 1789955940000,
-          "dateModifiedMillis": 1789955940000
+          "dateModifiedMillis": 1789955940000,
+          "keywords": "20260921T105900"
         },
         {
           "handle": 122,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -432,14 +491,15 @@
           "parent": 2,
           "name": "DSCF0018.JPG",
           "dateCreatedMillis": 1789956360000,
-          "dateModifiedMillis": 1789956360000
+          "dateModifiedMillis": 1789956360000,
+          "keywords": "20260921T110600"
         },
         {
           "handle": 123,
-          "storageId": 65537,
-          "format": 12288,
-          "compressedSize": 41000000,
-          "thumbFormat": 14337,
+          "storageId": 268435457,
+          "format": 45315,
+          "compressedSize": 86000000,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -447,14 +507,15 @@
           "parent": 2,
           "name": "DSCF0018.RAF",
           "dateCreatedMillis": 1789956360000,
-          "dateModifiedMillis": 1789956360000
+          "dateModifiedMillis": 1789956360000,
+          "keywords": "20260921T110600"
         },
         {
           "handle": 124,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -462,14 +523,15 @@
           "parent": 2,
           "name": "DSCF0019.JPG",
           "dateCreatedMillis": 1789956780000,
-          "dateModifiedMillis": 1789956780000
+          "dateModifiedMillis": 1789956780000,
+          "keywords": "20260921T111300"
         },
         {
           "handle": 125,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 12288,
           "compressedSize": 9800000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -477,14 +539,15 @@
           "parent": 2,
           "name": "DSCF0020.HIF",
           "dateCreatedMillis": 1789957200000,
-          "dateModifiedMillis": 1789957200000
+          "dateModifiedMillis": 1789957200000,
+          "keywords": "20260921T112000"
         },
         {
           "handle": 126,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -492,14 +555,15 @@
           "parent": 2,
           "name": "DSCF0021.JPG",
           "dateCreatedMillis": 1789957620000,
-          "dateModifiedMillis": 1789957620000
+          "dateModifiedMillis": 1789957620000,
+          "keywords": "20260921T112700"
         },
         {
           "handle": 127,
-          "storageId": 65537,
-          "format": 12288,
-          "compressedSize": 41000000,
-          "thumbFormat": 14337,
+          "storageId": 268435457,
+          "format": 45315,
+          "compressedSize": 86000000,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -507,14 +571,15 @@
           "parent": 2,
           "name": "DSCF0021.RAF",
           "dateCreatedMillis": 1789957620000,
-          "dateModifiedMillis": 1789957620000
+          "dateModifiedMillis": 1789957620000,
+          "keywords": "20260921T112700"
         },
         {
           "handle": 128,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -522,14 +587,15 @@
           "parent": 2,
           "name": "DSCF0022.JPG",
           "dateCreatedMillis": 1789958040000,
-          "dateModifiedMillis": 1789958040000
+          "dateModifiedMillis": 1789958040000,
+          "keywords": "20260921T113400"
         },
         {
           "handle": 129,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -537,14 +603,15 @@
           "parent": 2,
           "name": "DSCF0023.JPG",
           "dateCreatedMillis": 1789958460000,
-          "dateModifiedMillis": 1789958460000
+          "dateModifiedMillis": 1789958460000,
+          "keywords": "20260921T114100"
         },
         {
           "handle": 130,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -552,14 +619,15 @@
           "parent": 2,
           "name": "DSCF0024.JPG",
           "dateCreatedMillis": 1789958880000,
-          "dateModifiedMillis": 1789958880000
+          "dateModifiedMillis": 1789958880000,
+          "keywords": "20260921T114800"
         },
         {
           "handle": 131,
-          "storageId": 65537,
-          "format": 12288,
-          "compressedSize": 41000000,
-          "thumbFormat": 14337,
+          "storageId": 268435457,
+          "format": 45315,
+          "compressedSize": 86000000,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -567,14 +635,15 @@
           "parent": 2,
           "name": "DSCF0024.RAF",
           "dateCreatedMillis": 1789958880000,
-          "dateModifiedMillis": 1789958880000
+          "dateModifiedMillis": 1789958880000,
+          "keywords": "20260921T114800"
         },
         {
           "handle": 132,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 12288,
           "compressedSize": 9800000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -582,14 +651,15 @@
           "parent": 2,
           "name": "DSCF0025.HIF",
           "dateCreatedMillis": 1789959300000,
-          "dateModifiedMillis": 1789959300000
+          "dateModifiedMillis": 1789959300000,
+          "keywords": "20260921T115500"
         },
         {
           "handle": 133,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -597,14 +667,15 @@
           "parent": 2,
           "name": "DSCF0026.JPG",
           "dateCreatedMillis": 1789959720000,
-          "dateModifiedMillis": 1789959720000
+          "dateModifiedMillis": 1789959720000,
+          "keywords": "20260921T120200"
         },
         {
           "handle": 134,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -612,14 +683,15 @@
           "parent": 2,
           "name": "DSCF0027.JPG",
           "dateCreatedMillis": 1789960140000,
-          "dateModifiedMillis": 1789960140000
+          "dateModifiedMillis": 1789960140000,
+          "keywords": "20260921T120900"
         },
         {
           "handle": 135,
-          "storageId": 65537,
-          "format": 12288,
-          "compressedSize": 41000000,
-          "thumbFormat": 14337,
+          "storageId": 268435457,
+          "format": 45315,
+          "compressedSize": 86000000,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -627,14 +699,15 @@
           "parent": 2,
           "name": "DSCF0027.RAF",
           "dateCreatedMillis": 1789960140000,
-          "dateModifiedMillis": 1789960140000
+          "dateModifiedMillis": 1789960140000,
+          "keywords": "20260921T120900"
         },
         {
           "handle": 136,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -642,14 +715,15 @@
           "parent": 2,
           "name": "DSCF0028.JPG",
           "dateCreatedMillis": 1790046960000,
-          "dateModifiedMillis": 1790046960000
+          "dateModifiedMillis": 1790046960000,
+          "keywords": "20260922T121600"
         },
         {
           "handle": 137,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -657,14 +731,15 @@
           "parent": 2,
           "name": "DSCF0029.JPG",
           "dateCreatedMillis": 1790047380000,
-          "dateModifiedMillis": 1790047380000
+          "dateModifiedMillis": 1790047380000,
+          "keywords": "20260922T122300"
         },
         {
           "handle": 138,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 12288,
           "compressedSize": 9800000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -672,14 +747,15 @@
           "parent": 2,
           "name": "DSCF0030.HIF",
           "dateCreatedMillis": 1790047800000,
-          "dateModifiedMillis": 1790047800000
+          "dateModifiedMillis": 1790047800000,
+          "keywords": "20260922T123000"
         },
         {
           "handle": 139,
-          "storageId": 65537,
-          "format": 12288,
-          "compressedSize": 41000000,
-          "thumbFormat": 14337,
+          "storageId": 268435457,
+          "format": 45315,
+          "compressedSize": 86000000,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -687,14 +763,15 @@
           "parent": 2,
           "name": "DSCF0030.RAF",
           "dateCreatedMillis": 1790047800000,
-          "dateModifiedMillis": 1790047800000
+          "dateModifiedMillis": 1790047800000,
+          "keywords": "20260922T123000"
         },
         {
           "handle": 140,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -702,14 +779,15 @@
           "parent": 2,
           "name": "DSCF0031.JPG",
           "dateCreatedMillis": 1790048220000,
-          "dateModifiedMillis": 1790048220000
+          "dateModifiedMillis": 1790048220000,
+          "keywords": "20260922T123700"
         },
         {
           "handle": 141,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -717,14 +795,15 @@
           "parent": 2,
           "name": "DSCF0032.JPG",
           "dateCreatedMillis": 1790048640000,
-          "dateModifiedMillis": 1790048640000
+          "dateModifiedMillis": 1790048640000,
+          "keywords": "20260922T124400"
         },
         {
           "handle": 142,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 12301,
           "compressedSize": 350000000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 0,
@@ -732,14 +811,15 @@
           "parent": 2,
           "name": "DSCF0033.MOV",
           "dateCreatedMillis": 1790049060000,
-          "dateModifiedMillis": 1790049060000
+          "dateModifiedMillis": 1790049060000,
+          "keywords": "20260922T125100"
         },
         {
           "handle": 143,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -747,14 +827,15 @@
           "parent": 2,
           "name": "DSCF0034.JPG",
           "dateCreatedMillis": 1790049480000,
-          "dateModifiedMillis": 1790049480000
+          "dateModifiedMillis": 1790049480000,
+          "keywords": "20260922T125800"
         },
         {
           "handle": 144,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 12288,
           "compressedSize": 9800000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -762,14 +843,15 @@
           "parent": 2,
           "name": "DSCF0035.HIF",
           "dateCreatedMillis": 1790049900000,
-          "dateModifiedMillis": 1790049900000
+          "dateModifiedMillis": 1790049900000,
+          "keywords": "20260922T130500"
         },
         {
           "handle": 145,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -777,14 +859,15 @@
           "parent": 2,
           "name": "DSCF0036.JPG",
           "dateCreatedMillis": 1790050320000,
-          "dateModifiedMillis": 1790050320000
+          "dateModifiedMillis": 1790050320000,
+          "keywords": "20260922T131200"
         },
         {
           "handle": 146,
-          "storageId": 65537,
-          "format": 12288,
-          "compressedSize": 41000000,
-          "thumbFormat": 14337,
+          "storageId": 268435457,
+          "format": 45315,
+          "compressedSize": 86000000,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -792,14 +875,15 @@
           "parent": 2,
           "name": "DSCF0036.RAF",
           "dateCreatedMillis": 1790050320000,
-          "dateModifiedMillis": 1790050320000
+          "dateModifiedMillis": 1790050320000,
+          "keywords": "20260922T131200"
         },
         {
           "handle": 147,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -807,14 +891,15 @@
           "parent": 2,
           "name": "DSCF0037.JPG",
           "dateCreatedMillis": 1790050740000,
-          "dateModifiedMillis": 1790050740000
+          "dateModifiedMillis": 1790050740000,
+          "keywords": "20260922T131900"
         },
         {
           "handle": 148,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -822,14 +907,15 @@
           "parent": 2,
           "name": "DSCF0038.JPG",
           "dateCreatedMillis": 1790051160000,
-          "dateModifiedMillis": 1790051160000
+          "dateModifiedMillis": 1790051160000,
+          "keywords": "20260922T132600"
         },
         {
           "handle": 149,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 14337,
           "compressedSize": 14500000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -837,14 +923,15 @@
           "parent": 2,
           "name": "DSCF0039.JPG",
           "dateCreatedMillis": 1790051580000,
-          "dateModifiedMillis": 1790051580000
+          "dateModifiedMillis": 1790051580000,
+          "keywords": "20260922T133300"
         },
         {
           "handle": 150,
-          "storageId": 65537,
-          "format": 12288,
-          "compressedSize": 41000000,
-          "thumbFormat": 14337,
+          "storageId": 268435457,
+          "format": 45315,
+          "compressedSize": 86000000,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -852,14 +939,15 @@
           "parent": 2,
           "name": "DSCF0039.RAF",
           "dateCreatedMillis": 1790051580000,
-          "dateModifiedMillis": 1790051580000
+          "dateModifiedMillis": 1790051580000,
+          "keywords": "20260922T133300"
         },
         {
           "handle": 151,
-          "storageId": 65537,
+          "storageId": 268435457,
           "format": 12288,
           "compressedSize": 9800000,
-          "thumbFormat": 14337,
+          "thumbFormat": 14344,
           "thumbPixWidth": 160,
           "thumbPixHeight": 120,
           "imagePixWidth": 7728,
@@ -867,7 +955,8 @@
           "parent": 2,
           "name": "DSCF0040.HIF",
           "dateCreatedMillis": 1790052000000,
-          "dateModifiedMillis": 1790052000000
+          "dateModifiedMillis": 1790052000000,
+          "keywords": "20260922T134000"
         }
       ],
       "objectsTruncated": false
@@ -918,17 +1007,17 @@
     },
     {
       "handle": 103,
-      "objectFormat": 12288,
+      "objectFormat": 45315,
       "fileName": "DSCF0003.RAF",
-      "size": 1201,
-      "base64": "/9j/4AAQSkZJRgABAQAAAAAAAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAB4AKADASIAAhEBAxEB/8QAGQABAQEBAQEAAAAAAAAAAAAAAAMCBAUB/8QALhAAAgMAAgECBgAEBwAAAAAAABIBAgMEESETMQVBUWFxkRQVgaEiIzIzU7Lw/8QAFwEBAQEBAAAAAAAAAAAAAAAAAAECA//EABURAQEAAAAAAAAAAAAAAAAAAAAR/9oADAMBAAIRAxEAPwDpQIWUKackUCFlCgRQIWUKBFAhZQoEUCFlCgRQIWUKBFAhZQoEUCFlCgRQIWUKBFAhZQoFlCllChUVCllCgRUKWUKBFQpZQoEVCllCgRUKWUKBFQpZQoEVCllCgRUKWUKBFQpZQoFUCF1CkEECF1CgQQIXUKBBAhdQoEECF1CgQQIXUKBBAhdQoEECF1CgQQIXUKBBAhdQoFUCFkCBUUCFkCAONxLcrX062rWepnu3tEQVt8NslrZ747JHc1zt56+vUwX+F1iOVZonr07d9fgpl6FOJvtxc7xpWFl7d9Vnx3HQVw8fg68qmt816yr3Pc+/2j9GK8W1uNbeJhaWisx8/PzPW4memGPFtVIibzpdrxHj2j3n6d/snTj+nvzeH8rUma/frzH9gR51+HpTi58mek0mYj6+DOvGtjFJtMf46ReIj5Qevek65a8GPM450msfeP8AV/2k5OXnO/xCcs/PUxnX+ngDnx4Om0Z9TWPVulWn3+/4MZca2vIrhWYi1rLEz7Ho4Wrb4rx6Z/7eVorT7/f+s+TfGvxZ+IUivEtW/qeLer31Pf06A8/H4fbWul51yzrnZZm8zHn9fY+/y+Z1zypyMdLaWWFtPj8+DtyjKOHy/Vra1fWjxWep+ZLiRl/MsJxretWjxae577A58vh9taaXnXLOudlmbzMef0T34sYr1vlr3/xzM9f2PRzjKOHyvWra1fWjxWep+Zw61ym/+TW9a9e1p7nsI5kCFkCARQIWQIBZAhZAgVFAhZAgGcdLYXm1IiZms18/cY6WxdYiYvWa2ifoaQIBjW9trtaIjqIiIj2iIjorHK1jkZ79VfOsR317/LyZQIAy5OuXKnk16m8zMz37T2MrxnXXSZ71tHVft37z/wC+oQIBjG1sNq61iJtWe47Gd7ZbxtWIatm8+xtAgH3Lk2zrpWcs710s0xeJnz+z7/EzGlNKYY0tSzQtZ8/nyZQIB89W/paZ9R1pZp/JJCyBAIoELIEAigQsgQCyhSqhQJKFKqFAkoUqoUCShSqhQJKFKqFAkoUqoUCShSqhQJKFKqFAkoUqoUCShSqhQLKFLIEIqKhSyBAIqFLIEAioUsgQCKhSyBAIqFLIEAioUsgQCKhSyBAIqFLIEAioUsgQCyhQAooUAAoUAAoUAAoUAAoUAAoUAAoUAAoUAAoUAD//2Q=="
+      "size": 860,
+      "base64": "/9j/4AAQSkZJRgABAQAAAAAAAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAB4AKADASIAAhEBAxEB/8QAGQABAQADAQAAAAAAAAAAAAAAAAMBAgUE/8QAJBABAQADAAIBBAIDAAAAAAAAABIBAgMEESEFEzFxFGFBgaH/xAAXAQEBAQEAAAAAAAAAAAAAAAAAAQID/8QAFREBAQAAAAAAAAAAAAAAAAAAABH/2gAMAwEAAhEDEQA/APTBC0ktOSMELSSCMELSSCMELSSCMELSSCMELSSCMELSSCMELSSCMELSSCMELSSC0krSSKjJK0kgjJK0kgjJK0kgjJK0kgjJK0kgjJK0kgjJK0kgjJK0kgjJK0kgrBC8koIQQvJIIQQvJIIQQvJIIQQvJIIQQvJIIQQvJIIQQvJIIQQvJIIQQvJIKwQtBAqMELQQCMELQQCMELQQC+fpedPWN/K8fTbOMZnbbOM/P+kNvD66eTjxttfXTO2MYx+/w63bTxOnm8effTpW2mmKxtjGPx+k+WvXr9Q7dt9ddduOuca49+sYz+MY95Fjnd/D6eP5P2N8652+PnGfjPtbf6X9vfOm/meNrtrn1nGds/H/AB6vJ4bfY8TrtOdtM/b2zjbGfxn4/H9NfqH8X+X398+v3Kz83j17/XoHKghaCBEYIWggEYIWggEYIWggFoIWggVGCFoIBGCFoIBGCFoIBr26b9umN9sYxnGMY+P6b9vJ6dsb4211x9zOM7Zxj8+semIIBjn1358tuWMYzrttjb5/xnDXttt27bddsYxnbPvPpvBAIwQtBAIwQtBAIwQtBAIwQtBALSSrJIJSSrJIJSSrJIJSSrJIJSSrJIJSSrJIJSSrJIJSSrJIJSSrJIJSSrJILSStBCKjJK0EAjJK0EAjJK0EAjJK0EAjJK0EAjJK0EAjJK0EAjJK0EAjJK0EAtJICkkgBJIASSAEkgBJIASSAEkgBJIASSAP/9k="
     },
     {
-      "handle": 121,
-      "objectFormat": 12301,
-      "fileName": "DSCF0017.MOV",
-      "size": 1026,
-      "base64": "/9j/4AAQSkZJRgABAQAAAAAAAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAB4AKADASIAAhEBAxEB/8QAGQABAQEBAQEAAAAAAAAAAAAAAAMEAgEF/8QALxAAAgMAAQIEAwYHAAAAAAAAABIBAgMRBAUTISJhMUFRFDKBkcHwQlJTcXKhsv/EABcBAQEBAQAAAAAAAAAAAAAAAAABAgP/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwDSgQsoU05IoELKFAigQsoUCKBCyhQIoELKFAigQsoUCKBCyhQIoELKFAigQsoUCKBCyhQLKFLKFCoqFLKFAioUsoUCKhSyhQIqFLKFAioUsoUCKhSyhQIqFLKFAioUsoUCKhSyhQKoELqFIIIELqFAggQuoUCCBC6hQIIELqFAggQuoUCCBC6hQIIELqFAggQuoUCCBC6hQKoELIECooELIEAigQsgQB0vR36vbwqWrWeJnm08QcWwvTWcpj1xZePc29BXjXWY/o3/AOZNNqRbencOPT4bz/nHlx+fEhWDbtu+PVU6b06aXjmEnn9/AX7bpWlrU1y1SObVztzNY+p9SOZvEx56fYPTPz5/fJj7VWY7hnP8PEt9OOJ5Axa9LbLPLSZia615rMf34mCmfb9NYzmLUjxK2tETM/CDVlnPU9vvjWOb5aRake0+Ux+fBfOYnudqV+5llbOv4Vn9eQPn5dvnXCNp3xyrNprDzMczH4Et+mjG0RGuevMfHOZmI/0fQrGMdqz8al7R4tuEtEfKPYxaVzm8znW0U+UWnmQjOgQsgQCKBCyBAIoELIEAsgQsgQKigQsgQCKBCyBAOMr2xm01iJas1nn6THB1G2kdLPTcwk2b3PUCAJ6jXxMtKzFbZVitZj6QdX6q9qWrTPPN44tNK8TMHKBAPOm306TXxM+OeOPM8x0vhpOlYiZmJjz9zpAgHWXUznhGM45aViZmHiZ/UnteNZiYyzz4/kiY5OkCARQIWQIBFAhZAgEUCFkCAWUKVUKBJQpVQoElClVCgSUKVUKBJQpVQoElClVCgSUKVUKBJQpVQoElClVCgSUKVUKBZQpZAhFRUKWQIBFQpZAgEVClkCARUKWQIBFQpZAgEVClkCARUKWQIBFQpZAgEVClkCAWUKAFFCgAFCgAFCgAFCgAFCgAFCgAFCgAFCgAFCgAf//Z"
+      "handle": 105,
+      "objectFormat": 12288,
+      "fileName": "DSCF0005.HIF",
+      "size": 931,
+      "base64": "/9j/4AAQSkZJRgABAQAAAAAAAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAB4AKADASIAAhEBAxEB/8QAGQABAQEBAQEAAAAAAAAAAAAAAAMCBAEF/8QAJRAAAgMAAQMEAgMAAAAAAAAAABIBAgMRBAUTIUFhgRRRIjLB/8QAFwEBAQEBAAAAAAAAAAAAAAAAAAECA//EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AOlAhZQppyRQIWUKBFAhZQoEUCFlCgRQIWUKBFAhZQoEUCFlCgRQIWUKBFAhZQoEUCFlCgWUKWUKFRUKWUKBFQpZQoEVCllCgRUKWUKBFQpZQoEVCllCgRUKWUKBFQpZQoEVCllCgVQIXUKQQQIXUKBBAhdQoEECF1CgQQIXUKBBAhdQoEECF1CgQQIXUKBBAhdQoEECF1CgVQIWQIFRQIWQIBFAhZAgEUK4dLbqLzSkxExWbevxB6h2driI6q0zHMeO3Mfv0A4sOlt1Gk0pMRMVm3r8RyVy7fOuEbTvjlWbTWHmY5mPo7uiv01trRl01s7eO38p059p9uDFYxjtWfmpe0eW3CWiPaPgK447fNtoyz2x0lZtzWZ4jj6Pcu3zphG1t8cqzaaw8zEzx9HT0MZ/nWnKtq08duItPM/1NVjCO15eal7R5LcJaI/XwB8/bp4xvFY1z15jnmkzMEkOjStJvM51tFPaLTzJlAiKBCyBAIoELIEAigQsgQCyBCyBAqKBCyBAIoELIEAihTHS2F5tSImZrNfX5NIEAzjpbC83pETPEx6/JTLqZzwjGcctKxMzDxM/6ZQIBqOpmusaUxypMVmvFYniefsnOlrYVxmIWtptE+/qaQIBFAhZAgEUCFkCARQIWQIBFAhZAgFlClVCgSUKVUKBJQpVQoElClVCgSUKVUKBJQpVQoElClVCgSUKVUKBJQpVQoElClVCgWUKWQIRUVClkCARUKWQIBFQpZAgEVClkCARUKWQIBFQpZAgEVClkCARUKWQIBFQpZAgFlCgBRQoABQoABQoABQoABQoABQoABQoABQoABQoAH//2Q=="
     }
   ]
 }

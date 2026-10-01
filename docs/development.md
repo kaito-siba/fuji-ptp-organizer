@@ -35,10 +35,11 @@ Android Studio の AGP Upgrade Assistant が更新を提案してきたら、適
 
 | モジュール | 種別 | 内容 |
 |---|---|---|
-| `:app` | Android app | 画面（M0 は診断画面のみ）、接続管理、USB 接続時の自動起動 |
+| `:app` | Android app | 画面（写真一覧、診断）、接続管理、サムネイル取得（Coil）、USB 接続時の自動起動 |
 | `:core:ptp` | Kotlin/JVM | `PtpClient` インターフェース、PTP コード表、ダンプ形式、`FakePtpClient`、`DiagnosticsRunner` |
 | `:core:ptp-android` | Android library | `android.mtp.MtpDevice` を使った `FrameworkPtpClient`、USB 権限・接続（`UsbCameraConnector`） |
-| `:core:camera` | Kotlin/JVM | `CameraProfile`、`ProfileRegistry`、各機種プロファイル、`Shot` へのグルーピング |
+| `:core:camera` | Kotlin/JVM | `CameraProfile`、`ProfileRegistry`、各機種プロファイル、`Shot` へのグルーピング、写真一覧 `CameraCatalog` と ObjectInfo キャッシュ |
+| `:core:geotag` | Kotlin/JVM | GPX の読み込み、撮影時刻（EXIF → UTC）、トラックとの突き合わせ、時計ずれの推定 |
 
 `:core:ptp` と `:core:camera` は Android に依存しないので、JVM のユニットテストだけで検証できる。
 
@@ -97,7 +98,8 @@ python3 tools/generate_demo_dump.py
 3. USB-C ケーブル（両端 USB-C、OTG 対応）でスマートフォンとカメラを繋ぎ、カメラの電源を入れる
 4. 「Fuji PTP を開きますか？」のダイアログが出たら開く。出なければアプリを起動して「USB カメラに接続」を押す
 5. 「診断を実行」を押す（数百ファイルの ObjectInfo 取得と、各形式 1 ファイルの転送をするので少し時間がかかる）
-6. 「共有」か「ファイルに保存」で JSON を書き出し、`fixtures/dumps/` に置く
+6. 「共有」か「ファイルに保存」で JSON を書き出し、`fixtures/dumps/` に置く。
+   リポジトリは公開なので、先に `python3 tools/sanitize_dump.py <入力> <出力>` でシリアル番号とサムネイルを取り除くこと
 
 ダンプにはシリアル番号、ファイル名、（オンにした場合は）サムネイル画像が含まれる。
 

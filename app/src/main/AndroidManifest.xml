@@ -4,6 +4,16 @@
     <!-- エミュレータにも入れられるよう required=false。USB ホスト非対応端末ではデモモードのみ -->
     <uses-feature android:name="android.hardware.usb.host" android:required="false" />
 
+    <!-- ジオタグ確認画面の地図タイル（OpenFreeMap）を読む -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- 取り込み中はフォアグラウンドサービスでプロセスを保つ -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <!-- connectedDevice のフォアグラウンドサービスの起動条件を満たすため（通常権限、ネットワークは使わない） -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:name=".FujiPtpApp"
         android:allowBackup="false"
@@ -28,6 +38,11 @@
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
         </activity>
+
+        <service
+            android:name=".importer.ImportService"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -2,6 +2,8 @@ package io.github.kaitosiba.fujiptp.camera
 
 import io.github.kaitosiba.fujiptp.ptp.PtpDeviceInfo
 import io.github.kaitosiba.fujiptp.ptp.PtpObjectInfo
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 /** USB 層の識別子。Android の UsbDevice に依存しないよう素の値で持つ。 */
 data class UsbIdentity(val vendorId: Int, val productId: Int)
@@ -54,6 +56,17 @@ interface CameraProfile {
 
     /** 同一ショット（JPEG + RAF 等）をまとめるためのキー */
     fun shotKey(info: PtpObjectInfo): String
+
+    /** GetThumb でサムネイルが取れる種類か。false の種類は UI でプレースホルダを出す */
+    fun hasPtpThumbnail(kind: MediaKind): Boolean
+
+    /**
+     * ObjectInfo の日時をカメラ時計の壁時計時刻（TZ なし）として返す。日付ごとのグルーピング用。
+     *
+     * android.mtp は PTP の日時文字列を端末の TZ で解釈するため、[hostZone] で元に戻す。
+     * 撮影時刻の正確な値（ジオタグ等）には EXIF の DateTimeOriginal を使うこと。
+     */
+    fun captureWallClock(info: PtpObjectInfo, hostZone: ZoneId): LocalDateTime?
 
     val previewStrategy: PreviewStrategy
     val transport: TransportPreference
