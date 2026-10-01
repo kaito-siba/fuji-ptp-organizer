@@ -30,7 +30,7 @@ class FujiPtpApp : Application(), SingletonImageLoader.Factory {
         ImageLoader.Builder(context)
             .components {
                 add(PtpThumbnailKeyer())
-                add(PtpThumbnailFetcher.Factory { container.catalogManager.active.value?.session?.client })
+                add(PtpThumbnailFetcher.Factory { container.catalogManager.active.value?.session })
             }
             .diskCache {
                 DiskCache.Builder()

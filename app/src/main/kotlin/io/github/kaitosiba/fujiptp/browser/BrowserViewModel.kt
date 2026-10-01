@@ -83,8 +83,9 @@ class BrowserViewModel(app: Application) : AndroidViewModel(app) {
                             shot = shot,
                             thumbnail = if (profile.hasPtpThumbnail(primary.kind)) {
                                 PtpThumbnail(
-                                    handle = primary.info.handle,
                                     cacheKey = StableObjectId.of(active.cameraSerial, primary.info).key,
+                                    info = primary.info,
+                                    kind = primary.kind,
                                 )
                             } else {
                                 null

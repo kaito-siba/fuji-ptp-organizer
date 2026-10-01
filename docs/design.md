@@ -378,6 +378,9 @@ ObjectInfo を 1 件ずつ取ると、1659 件で約 35 秒かかる。M1 では
   1 件でも違えば（カード入れ替え・削除でハンドルの対応がずれた）全件取り直す
 - サムネイルは Coil 3 のカスタム Fetcher（`PtpThumbnailFetcher`）。キャッシュキーは `StableObjectId`。
   Coil はカスタム Fetcher の結果をディスクに書かないので、Fetcher 内でディスクキャッシュを読み書きする
+- GetThumb のサムネイル（160×120 固定）には EXIF が無く、3:2 の写真では上下に黒帯が入る。
+  Fetcher で黒帯を切り落とし、本体ファイル先頭の EXIF Orientation（RAF は埋め込み JPEG の EXIF）を
+  GetPartialObject で 16 KB だけ読んで回転してから、加工後の画像をディスクキャッシュに保存する
 - PTP の直列化は `FrameworkPtpClient` の単一スレッドに任せている（FIFO）。
   スクロールで見えなくなったサムネイル要求は、実行前にキャンセルされれば PTP に流れない
 - 画面遷移は navigation-compose（一覧 → 診断）
