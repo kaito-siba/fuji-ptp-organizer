@@ -9,6 +9,8 @@ import coil3.disk.DiskCache
 import io.github.kaitosiba.fujiptp.camera.ProfileRegistry
 import io.github.kaitosiba.fujiptp.catalog.CatalogManager
 import io.github.kaitosiba.fujiptp.connection.CameraConnectionManager
+import io.github.kaitosiba.fujiptp.geotag.GeotagSettings
+import io.github.kaitosiba.fujiptp.geotag.GpxRepository
 import io.github.kaitosiba.fujiptp.importer.AppDatabase
 import io.github.kaitosiba.fujiptp.importer.ImportManager
 import io.github.kaitosiba.fujiptp.preview.PtpPreviewFetcher
@@ -19,6 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import okio.Path.Companion.toOkioPath
+import org.maplibre.android.MapLibre
 
 class FujiPtpApp : Application(), SingletonImageLoader.Factory {
 
@@ -29,6 +32,7 @@ class FujiPtpApp : Application(), SingletonImageLoader.Factory {
     override fun onCreate() {
         super.onCreate()
         container = AppContainer(this)
+        MapLibre.getInstance(this)
     }
 
     override fun newImageLoader(context: PlatformContext): ImageLoader =
@@ -59,7 +63,11 @@ class AppContainer(app: Application) {
     val connectionManager: CameraConnectionManager =
         CameraConnectionManager(app, profileRegistry, applicationScope)
     val catalogManager: CatalogManager = CatalogManager(app, connectionManager, applicationScope)
-    val database: AppDatabase = Room.databaseBuilder(app, AppDatabase::class.java, "fujiptp.db").build()
+    val database: AppDatabase = Room.databaseBuilder(app, AppDatabase::class.java, "fujiptp.db")
+        .addMigrations(AppDatabase.MIGRATION_1_2)
+        .build()
     val importManager: ImportManager =
         ImportManager(app, catalogManager, database.importedFiles(), applicationScope)
+    val geotagSettings: GeotagSettings = GeotagSettings(app)
+    val gpxRepository: GpxRepository = GpxRepository(app.contentResolver)
 }

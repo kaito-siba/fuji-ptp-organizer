@@ -4,6 +4,9 @@
     <!-- エミュレータにも入れられるよう required=false。USB ホスト非対応端末ではデモモードのみ -->
     <uses-feature android:name="android.hardware.usb.host" android:required="false" />
 
+    <!-- ジオタグ確認画面の地図タイル（OpenFreeMap）を読む -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <!-- 取り込み中はフォアグラウンドサービスでプロセスを保つ -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />

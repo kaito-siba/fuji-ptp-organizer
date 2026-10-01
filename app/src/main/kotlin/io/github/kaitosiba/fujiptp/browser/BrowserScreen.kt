@@ -61,6 +61,7 @@ fun BrowserScreen(
     viewModel: BrowserViewModel,
     onOpenPreview: (String) -> Unit,
     onOpenDiagnostics: () -> Unit,
+    onOpenGeotag: () -> Unit,
 ) {
     val ui by viewModel.ui.collectAsStateWithLifecycle()
     val selection by viewModel.selection.collectAsStateWithLifecycle()
@@ -90,6 +91,7 @@ fun BrowserScreen(
                             TextButton(onClick = viewModel::reload) { Text("再読込") }
                             TextButton(onClick = viewModel::disconnect) { Text("切断") }
                         }
+                        TextButton(onClick = onOpenGeotag) { Text("ジオタグ") }
                         TextButton(onClick = onOpenDiagnostics) { Text("診断") }
                     },
                 )

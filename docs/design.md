@@ -327,7 +327,7 @@ TZ を引く処理（`TimeZoneLookup`）はオフラインで動かす。
 | M0 | プロジェクト雛形 + 診断画面（スパイク） | X100VI を繋いで DeviceInfo/ObjectInfo がダンプできる。§11 の確認事項が埋まる（**完了**） |
 | M1 | 接続・一覧・サムネイル | 実機で日付グリッドが表示される（**実装済み・実機確認待ち**） |
 | M2 | プレビュー・選択・ダウンロード・取込済み管理 | **MVP 完了**（**実装済み・実機確認待ち**） |
-| M3 | GPX 読み込み・マッチングの dry run 表示 | 地図上で付与予定位置が確認できる |
+| M3 | GPX 読み込み・マッチングの dry run 表示 | 地図上で付与予定位置が確認できる（**実装済み・実機確認待ち**） |
 | M4 | ジオタグ書き込み（JPEG EXIF / XMP サイドカー） | |
 | M5 | 他機種プロファイル追加 / 必要なら RawUsbPtpClient | |
 
@@ -398,6 +398,18 @@ ObjectInfo を 1 件ずつ取ると、1659 件で約 35 秒かかる。M1 では
   向きは画像内の EXIF に従う。キャッシュは 512 MB を超えたら古い順に消す
 - 通知権限（Android 13+）は取り込み開始時に求める。拒否されても取り込みは行う
 - connectedDevice のフォアグラウンドサービス起動条件を満たすため、通常権限の CHANGE_NETWORK_STATE を宣言している
+
+### M3
+
+- `:core:geotag`（pure Kotlin）: `GpxParser`（XmlPullParser。Android は標準、JVM テストは kxml2）、
+  `TrackIndex`（二分探索 + 線形補間。間隔 5 分超は最寄り点が 2 分以内なら採用）、`PhotoTime`（EXIF → UTC）、
+  `ClockShiftEstimator`（±24 時間を 30 分刻みで試し、GPX に収まる写真が大幅に増えるずらしを提案）
+- 撮影時刻は取り込んだファイル自身の EXIF（DateTimeOriginal / SubSec / OffsetTimeOriginal）を取り込み時に読んで Room に保存する。
+  DB は v2（`MIGRATION_1_2` で列追加）。v1 で取り込んだ分は確認画面を開いたときに読み直す
+- GPX フォルダは SAF のツリー URI を永続化。撮影時刻より前に更新された GPX は読まない（撮影時刻を含むファイルは必ずそれ以降に更新される）
+- 確認画面: 地図（MapLibre + OpenFreeMap、キー不要）にトラックと付与予定位置（補間は緑、最寄り点は橙）、
+  件数のまとめ、カメラ時計の補正（±10 秒〜1 時間）、時刻ずれの提案、ファイルごとの一覧
+- 書き込み（JPEG の EXIF、RAF / HEIF の XMP サイドカー）と撮影地の TZ への補正（§8.3）は M4
 
 - パッケージ名（applicationId）: `io.github.kaitosiba.fujiptp`
 - M0 の診断は `DiagnosticsRunner`（`:core:ptp`）にまとめた。実機とデモで同じコードが動く

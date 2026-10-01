@@ -5,8 +5,10 @@ import android.content.Intent
 import android.util.Log
 import androidx.core.content.ContextCompat
 import io.github.kaitosiba.fujiptp.camera.ImportPlan
+import io.github.kaitosiba.fujiptp.camera.MediaKind
 import io.github.kaitosiba.fujiptp.catalog.ActiveCatalog
 import io.github.kaitosiba.fujiptp.catalog.CatalogManager
+import io.github.kaitosiba.fujiptp.geotag.ExifTimeReader
 import io.github.kaitosiba.fujiptp.ptp.PtpOperation
 import io.github.kaitosiba.fujiptp.ptp.transfer.ObjectTransfer
 import kotlinx.coroutines.CancellationException
@@ -110,6 +112,8 @@ class ImportManager(
                         ) { done -> _progress.update { it.copy(transferredBytes = bytesBefore + done) } }
                     }
                     writer.publish(target)
+                    // ジオタグで使う撮影時刻は取り込んだファイル自身の EXIF から読んでおく
+                    val exif = if (item.kind == MediaKind.VIDEO) null else ExifTimeReader.read(context.contentResolver, target.uri)
                     dao.upsert(
                         ImportedFileEntity(
                             stableKey = item.stableId.key,
@@ -121,6 +125,10 @@ class ImportManager(
                             relativePath = target.relativePath,
                             capturedAt = item.capturedAt?.toString(),
                             importedAtMillis = System.currentTimeMillis(),
+                            exifDateTimeOriginal = exif?.dateTimeOriginal,
+                            exifSubSecTimeOriginal = exif?.subSecTimeOriginal,
+                            exifOffsetTimeOriginal = exif?.offsetTimeOriginal,
+                            exifRead = true,
                         ),
                     )
                     _progress.update { it.copy(completedFiles = it.completedFiles + 1) }

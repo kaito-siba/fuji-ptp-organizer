@@ -17,6 +17,8 @@ import io.github.kaitosiba.fujiptp.browser.BrowserScreen
 import io.github.kaitosiba.fujiptp.browser.BrowserViewModel
 import io.github.kaitosiba.fujiptp.diagnostics.DiagnosticsScreen
 import io.github.kaitosiba.fujiptp.diagnostics.DiagnosticsViewModel
+import io.github.kaitosiba.fujiptp.geotag.GeotagScreen
+import io.github.kaitosiba.fujiptp.geotag.GeotagViewModel
 import io.github.kaitosiba.fujiptp.preview.PreviewScreen
 import io.github.kaitosiba.fujiptp.ui.theme.FujiPtpTheme
 
@@ -50,6 +52,7 @@ private object Routes {
     const val BROWSER = "browser"
     const val PREVIEW = "preview"
     const val DIAGNOSTICS = "diagnostics"
+    const val GEOTAG = "geotag"
 }
 
 @Composable
@@ -63,6 +66,7 @@ private fun AppNavHost() {
                 viewModel = browserViewModel,
                 onOpenPreview = { navController.navigate(Routes.PREVIEW) },
                 onOpenDiagnostics = { navController.navigate(Routes.DIAGNOSTICS) },
+                onOpenGeotag = { navController.navigate(Routes.GEOTAG) },
             )
         }
         composable(Routes.PREVIEW) {
@@ -71,6 +75,10 @@ private fun AppNavHost() {
         composable(Routes.DIAGNOSTICS) {
             val viewModel: DiagnosticsViewModel = viewModel()
             DiagnosticsScreen(viewModel, onBack = { navController.popBackStack() })
+        }
+        composable(Routes.GEOTAG) {
+            val viewModel: GeotagViewModel = viewModel()
+            GeotagScreen(viewModel, onBack = { navController.popBackStack() })
         }
     }
 }

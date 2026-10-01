@@ -44,6 +44,7 @@ dependencies {
     implementation(project(":core:ptp"))
     implementation(project(":core:ptp-android"))
     implementation(project(":core:camera"))
+    implementation(project(":core:geotag"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
@@ -59,6 +60,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.coil.compose)
     implementation(libs.coil.core)
+    implementation(libs.maplibre.android)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)

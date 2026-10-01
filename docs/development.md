@@ -39,6 +39,7 @@ Android Studio の AGP Upgrade Assistant が更新を提案してきたら、適
 | `:core:ptp` | Kotlin/JVM | `PtpClient` インターフェース、PTP コード表、ダンプ形式、`FakePtpClient`、`DiagnosticsRunner` |
 | `:core:ptp-android` | Android library | `android.mtp.MtpDevice` を使った `FrameworkPtpClient`、USB 権限・接続（`UsbCameraConnector`） |
 | `:core:camera` | Kotlin/JVM | `CameraProfile`、`ProfileRegistry`、各機種プロファイル、`Shot` へのグルーピング、写真一覧 `CameraCatalog` と ObjectInfo キャッシュ |
+| `:core:geotag` | Kotlin/JVM | GPX の読み込み、撮影時刻（EXIF → UTC）、トラックとの突き合わせ、時計ずれの推定 |
 
 `:core:ptp` と `:core:camera` は Android に依存しないので、JVM のユニットテストだけで検証できる。
 
