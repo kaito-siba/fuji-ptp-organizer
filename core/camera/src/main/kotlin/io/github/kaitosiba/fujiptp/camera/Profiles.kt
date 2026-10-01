@@ -127,7 +127,7 @@ open class FujifilmProfile : GenericPtpProfile() {
  * FUJIFILM X100VI。
  *
  * FW1.32 の実機診断（fixtures/dumps/x100vi-fw132.json）で確認した内容:
- * USB PID 0x0305、RAF は ObjectFormat 0xB103、GetPartialObject 対応、全階層の一覧取得可、
+ * PC接続モード「USBカードリーダー」で接続、USB PID 0x0305、RAF は ObjectFormat 0xB103、GetPartialObject 対応、全階層の一覧取得可、
  * JPEG / RAF は GetThumb 可・MOV は不可、EXIF に OffsetTimeOriginal あり。
  */
 object FujifilmX100VIProfile : FujifilmProfile() {
@@ -135,6 +135,9 @@ object FujifilmX100VIProfile : FujifilmProfile() {
     override val displayName: String = "FUJIFILM X100VI"
     override val verified: Boolean = true
     override val clockPolicy: CameraClockPolicy = CameraClockPolicy(writesExifOffsetTime = true)
+
+    /** 「USBカードリーダー」モードで接続できることを確認済み */
+    override val connectionGuide: ConnectionGuide = super.connectionGuide.copy(verified = true)
 
     const val USB_PRODUCT_ID: Int = 0x0305
 

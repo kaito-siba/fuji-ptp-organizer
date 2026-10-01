@@ -22,6 +22,7 @@ class X100VIDumpTest {
     fun `resolves to the X100VI profile`() {
         assertEquals(FujifilmX100VIProfile, profile)
         assertEquals(FujifilmX100VIProfile.USB_PRODUCT_ID, dump.usb?.productId)
+        assertTrue(profile.connectionGuide.verified)
     }
 
     @Test

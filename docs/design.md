@@ -264,19 +264,53 @@ flowchart LR
   Photo[ImportedFile<br/>EXIF DateTimeOriginal] --> TZ[時刻正規化<br/>ローカル→UTC + 時計ズレ補正]
   TZ --> Match[Matcher<br/>二分探索 + 線形補間]
   Index --> Match
-  Match --> Review[プレビュー（地図・dry run）]
+  Match --> Zone[TimeZoneLookup<br/>緯度経度→ZoneId]
+  Zone --> Review[プレビュー（地図・dry run）]
   Review --> Write[Writer<br/>JPEG: EXIF直接 / RAF・HEIF: XMPサイドカー]
 ```
 
 ### 8.2 要点
 
 - **時刻の正規化が一番の肝**。カメラの撮影時刻は TZ なしのローカル時刻なので、
-  1. EXIF `OffsetTimeOriginal` があればそれを使う（X100VI が書くかは要確認 → `clockPolicy` に記録）
+  1. EXIF `OffsetTimeOriginal` があればそれを使う（X100VI は書く。§11 参照）
   2. なければ設定のカメラ TZ（既定: 端末の TZ）
   3. さらに「カメラ時計のズレ（秒）」を補正値として持つ。スマホの時計画面を撮影して自動算出する機能があると便利
 - **マッチング**: 前後のトラックポイント間で線形補間。間隔が `maxGap`（既定 5 分）を超える場合は最近傍が `tolerance` 以内なら採用、それ以外は `NO_TRACK`。
 - **書き込み**: `androidx.exifinterface` は JPEG への書き込みに対応しているが RAF / HEIF には書けないので、それらは同名の `.xmp` サイドカーを出力する（Lightroom 等が読める）。形式ごとの Writer 選択はカメラではなくファイル形式に依存するので、プロファイルではなく `GeotagWriterRegistry` に置く。
 - `:core:geotag` は pure Kotlin にして、GPX パースと補間ロジックを JVM テストで固める。
+
+### 8.3 旅行先でのタイムゾーン補正
+
+カメラの TZ を旅行先に合わせ忘れる前提で、あとから補正できるようにする。
+
+**位置のマッチングは TZ を合わせ忘れても壊れない。**
+X100VI は撮影時刻に `OffsetTimeOriginal` を付けて記録するので、カメラ時計さえ正しければ UTC は一意に決まる。
+日本時間（`+09:00`）のままカナダで撮っても、UTC で GPX（UTC 記録）と突き合わせれば正しい位置が出る。
+カメラの「時差設定」で現地時間に切り替えた場合も、オフセットが一緒に変わるので同じ。
+
+**ずれるのは「現地時刻」としての表示と記録。** 上の例では EXIF の撮影時刻が日本時間のままになり、
+日付グルーピングや Lightroom 等での表示が現地の感覚と合わない。これをジオタグと同時に直す。
+
+1. マッチした位置の緯度経度から、撮影地の TZ（`ZoneId`、例: `America/Vancouver`）を引く
+2. UTC をその TZ に変換し、`DateTimeOriginal` / `OffsetTimeOriginal`（`SubSecTimeOriginal` は維持）を現地時刻で書き直す
+   - サマータイムは `ZoneId` のルールで自動的に正しいオフセットになる
+   - RAF / HEIF は XMP サイドカーの `exif:DateTimeOriginal`（オフセット付き）に書く
+3. 書き換え前の値は Room に保存し、元に戻せるようにする
+4. GPX でマッチしなかった写真は、時間的に近い（同じ日の前後の）マッチ済み写真の TZ を使う。それもなければ変更しない
+
+TZ を引く処理（`TimeZoneLookup`）はオフラインで動かす。
+
+- データ: [timezone-boundary-builder](https://github.com/evansiroky/timezone-boundary-builder) の境界ポリゴン
+- ビルド時に簡略化した軽量なデータ（数 MB 以内）に変換してアセットに同梱し、pure Kotlin の点・多角形判定で引く
+- 既製ライブラリの timeshape は zstd の JNI に依存し、データも大きいので、まずは自前の変換で試す
+- 国境付近の判定がまれに外れても、ユーザーがプレビューで直せればよい
+
+**カメラ時計そのものがずれている場合**は TZ では直せない。手入力の補正値（秒〜時間単位）に加えて、
+次の自動推定も用意する。
+
+- 一定期間の写真が GPX の記録範囲から丸ごと外れていて、時間単位でずらすと収まる場合は、その補正を提案する
+  （例: 現地時刻に合わせて時計を手で変えたが、TZ 設定は日本のまま）
+- スマホの時計画面を撮った写真から秒単位のずれを算出する
 
 ## 9. テスト・開発戦略
 
@@ -303,7 +337,7 @@ X100VI FW1.32 + Nothing Phone (A024, Android 16) での診断結果（`fixtures/
 
 | 項目 | 結果 | 反映先 |
 |---|---|---|
-| PC接続モード | 未記録（要確認） | `connectionGuide` |
+| PC接続モード | 「USBカードリーダー」で PTP として見える | `connectionGuide` |
 | USB ID / `DeviceInfo.model` | VID `0x04CB` / PID `0x0305`、model `"X100VI"`、USB 2.0 High Speed（bulk 512B） | `match()` |
 | ObjectFormat コード | JPEG `0x3801`、RAF `0xB103`（ベンダー）、MOV `0x300D`。HEIF は未確認（カードに無し） | `classify()` |
 | GetThumb | JPEG・RAF は 160×120 の JPEG が返る（数 ms）。MOV は失敗 | `hasPtpThumbnail()` |
