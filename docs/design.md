@@ -326,7 +326,7 @@ TZ を引く処理（`TimeZoneLookup`）はオフラインで動かす。
 |---|---|---|
 | M0 | プロジェクト雛形 + 診断画面（スパイク） | X100VI を繋いで DeviceInfo/ObjectInfo がダンプできる。§11 の確認事項が埋まる（**完了**） |
 | M1 | 接続・一覧・サムネイル | 実機で日付グリッドが表示される（**実装済み・実機確認待ち**） |
-| M2 | プレビュー・選択・ダウンロード・取込済み管理 | **MVP 完了** |
+| M2 | プレビュー・選択・ダウンロード・取込済み管理 | **MVP 完了**（**実装済み・実機確認待ち**） |
 | M3 | GPX 読み込み・マッチングの dry run 表示 | 地図上で付与予定位置が確認できる |
 | M4 | ジオタグ書き込み（JPEG EXIF / XMP サイドカー） | |
 | M5 | 他機種プロファイル追加 / 必要なら RawUsbPtpClient | |
@@ -384,6 +384,20 @@ ObjectInfo を 1 件ずつ取ると、1659 件で約 35 秒かかる。M1 では
 - PTP の直列化は `FrameworkPtpClient` の単一スレッドに任せている（FIFO）。
   スクロールで見えなくなったサムネイル要求は、実行前にキャンセルされれば PTP に流れない
 - 画面遷移は navigation-compose（一覧 → 診断）
+
+### M2
+
+- 選択: 長押しで選択開始、選択中はタップで切り替え、日付見出しのタップでその日をまとめて選択。「未取込を全選択」あり
+- 取り込み: 形式（すべて / JPEG・HEIF のみ / RAW のみ）と取込済みスキップを選んで開始。
+  `planImport`（`:core:camera`）で対象ファイルを決め、`ImportManager` がアプリのスコープで順に転送する。
+  `ImportService`（foregroundServiceType=connectedDevice）は前面維持と通知だけを担当する
+- 転送: `ObjectTransfer` が GetPartialObject で 4 MB ずつ読み、MediaStore の IS_PENDING なエントリに直接書く。
+  完了で公開、失敗・中止で削除。画像コレクションが MIME を受け付けなければ Downloads に保存する
+- 取込記録: Room の `imported_files`（`StableObjectId.key` が主キー）。一覧の「取込済」「一部取込」表示とスキップ判定に使う
+- プレビュー: JPEG / HEIF は本体、RAF は埋め込み JPEG（ヘッダの位置情報から部分読み）をキャッシュに置いて表示。
+  向きは画像内の EXIF に従う。キャッシュは 512 MB を超えたら古い順に消す
+- 通知権限（Android 13+）は取り込み開始時に求める。拒否されても取り込みは行う
+- connectedDevice のフォアグラウンドサービス起動条件を満たすため、通常権限の CHANGE_NETWORK_STATE を宣言している
 
 - パッケージ名（applicationId）: `io.github.kaitosiba.fujiptp`
 - M0 の診断は `DiagnosticsRunner`（`:core:ptp`）にまとめた。実機とデモで同じコードが動く

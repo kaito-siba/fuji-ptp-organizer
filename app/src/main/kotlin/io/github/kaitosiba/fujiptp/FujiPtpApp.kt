@@ -1,6 +1,7 @@
 package io.github.kaitosiba.fujiptp
 
 import android.app.Application
+import androidx.room.Room
 import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.SingletonImageLoader
@@ -8,6 +9,10 @@ import coil3.disk.DiskCache
 import io.github.kaitosiba.fujiptp.camera.ProfileRegistry
 import io.github.kaitosiba.fujiptp.catalog.CatalogManager
 import io.github.kaitosiba.fujiptp.connection.CameraConnectionManager
+import io.github.kaitosiba.fujiptp.importer.AppDatabase
+import io.github.kaitosiba.fujiptp.importer.ImportManager
+import io.github.kaitosiba.fujiptp.preview.PtpPreviewFetcher
+import io.github.kaitosiba.fujiptp.preview.PtpPreviewKeyer
 import io.github.kaitosiba.fujiptp.thumbnail.PtpThumbnailFetcher
 import io.github.kaitosiba.fujiptp.thumbnail.PtpThumbnailKeyer
 import kotlinx.coroutines.CoroutineScope
@@ -31,6 +36,8 @@ class FujiPtpApp : Application(), SingletonImageLoader.Factory {
             .components {
                 add(PtpThumbnailKeyer())
                 add(PtpThumbnailFetcher.Factory { container.catalogManager.active.value?.session })
+                add(PtpPreviewKeyer())
+                add(PtpPreviewFetcher.Factory(cacheDir.resolve("previews")) { container.catalogManager.active.value?.session })
             }
             .diskCache {
                 DiskCache.Builder()
@@ -52,4 +59,7 @@ class AppContainer(app: Application) {
     val connectionManager: CameraConnectionManager =
         CameraConnectionManager(app, profileRegistry, applicationScope)
     val catalogManager: CatalogManager = CatalogManager(app, connectionManager, applicationScope)
+    val database: AppDatabase = Room.databaseBuilder(app, AppDatabase::class.java, "fujiptp.db").build()
+    val importManager: ImportManager =
+        ImportManager(app, catalogManager, database.importedFiles(), applicationScope)
 }

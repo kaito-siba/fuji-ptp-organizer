@@ -17,6 +17,7 @@ import io.github.kaitosiba.fujiptp.browser.BrowserScreen
 import io.github.kaitosiba.fujiptp.browser.BrowserViewModel
 import io.github.kaitosiba.fujiptp.diagnostics.DiagnosticsScreen
 import io.github.kaitosiba.fujiptp.diagnostics.DiagnosticsViewModel
+import io.github.kaitosiba.fujiptp.preview.PreviewScreen
 import io.github.kaitosiba.fujiptp.ui.theme.FujiPtpTheme
 
 class MainActivity : ComponentActivity() {
@@ -47,16 +48,25 @@ class MainActivity : ComponentActivity() {
 
 private object Routes {
     const val BROWSER = "browser"
+    const val PREVIEW = "preview"
     const val DIAGNOSTICS = "diagnostics"
 }
 
 @Composable
 private fun AppNavHost() {
     val navController = rememberNavController()
+    // 一覧とプレビューで選択状態や一覧を共有するため、Activity スコープで持つ
+    val browserViewModel: BrowserViewModel = viewModel()
     NavHost(navController = navController, startDestination = Routes.BROWSER) {
         composable(Routes.BROWSER) {
-            val viewModel: BrowserViewModel = viewModel()
-            BrowserScreen(viewModel, onOpenDiagnostics = { navController.navigate(Routes.DIAGNOSTICS) })
+            BrowserScreen(
+                viewModel = browserViewModel,
+                onOpenPreview = { navController.navigate(Routes.PREVIEW) },
+                onOpenDiagnostics = { navController.navigate(Routes.DIAGNOSTICS) },
+            )
+        }
+        composable(Routes.PREVIEW) {
+            PreviewScreen(browserViewModel, onBack = { navController.popBackStack() })
         }
         composable(Routes.DIAGNOSTICS) {
             val viewModel: DiagnosticsViewModel = viewModel()
