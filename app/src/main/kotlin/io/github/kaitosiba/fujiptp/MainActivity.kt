@@ -7,22 +7,26 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
+import androidx.compose.runtime.Composable
 import androidx.core.content.IntentCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import io.github.kaitosiba.fujiptp.browser.BrowserScreen
+import io.github.kaitosiba.fujiptp.browser.BrowserViewModel
 import io.github.kaitosiba.fujiptp.diagnostics.DiagnosticsScreen
 import io.github.kaitosiba.fujiptp.diagnostics.DiagnosticsViewModel
 import io.github.kaitosiba.fujiptp.ui.theme.FujiPtpTheme
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: DiagnosticsViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             FujiPtpTheme {
-                DiagnosticsScreen(viewModel)
+                AppNavHost()
             }
         }
         if (savedInstanceState == null) handleUsbIntent(intent)
@@ -37,6 +41,26 @@ class MainActivity : ComponentActivity() {
     private fun handleUsbIntent(intent: Intent?) {
         if (intent?.action != UsbManager.ACTION_USB_DEVICE_ATTACHED) return
         val device = IntentCompat.getParcelableExtra(intent, UsbManager.EXTRA_DEVICE, UsbDevice::class.java)
-        viewModel.connectUsb(device)
+        (application as FujiPtpApp).container.connectionManager.connectUsb(device)
+    }
+}
+
+private object Routes {
+    const val BROWSER = "browser"
+    const val DIAGNOSTICS = "diagnostics"
+}
+
+@Composable
+private fun AppNavHost() {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = Routes.BROWSER) {
+        composable(Routes.BROWSER) {
+            val viewModel: BrowserViewModel = viewModel()
+            BrowserScreen(viewModel, onOpenDiagnostics = { navController.navigate(Routes.DIAGNOSTICS) })
+        }
+        composable(Routes.DIAGNOSTICS) {
+            val viewModel: DiagnosticsViewModel = viewModel()
+            DiagnosticsScreen(viewModel, onBack = { navController.popBackStack() })
+        }
     }
 }

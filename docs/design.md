@@ -18,7 +18,7 @@ Fujifilm のカメラを Android 端末と USB 接続し、PTP で SD カード�
 | 言語 | Kotlin 2.x | 指定 |
 | UI | Jetpack Compose + Material 3 | |
 | 非同期 | Coroutines / Flow | PTP は直列実行が前提なので Mutex/専用 Dispatcher で制御しやすい |
-| DI | Hilt | M0 は手動 DI（`AppContainer`）。画面が増える M1 で導入する |
+| DI | 手動 DI（`AppContainer`） | 依存がまだ少ないので Hilt は見送り。画面と依存が増えたら導入する |
 | 画像読込 | Coil 3 (カスタム Fetcher) | カメラ上のサムネイルを通常の画像と同じ仕組みでキャッシュ |
 | 永続化 | Room (取込履歴・将来のジオタグ状態), DataStore (設定) | |
 | USB/PTP | `android.mtp.MtpDevice`（MVP） → 必要になれば自前 PTP 実装 | §4 参照 |
@@ -325,7 +325,7 @@ TZ を引く処理（`TimeZoneLookup`）はオフラインで動かす。
 | # | 内容 | 完了条件 |
 |---|---|---|
 | M0 | プロジェクト雛形 + 診断画面（スパイク） | X100VI を繋いで DeviceInfo/ObjectInfo がダンプできる。§11 の確認事項が埋まる（**完了**） |
-| M1 | 接続・一覧・サムネイル | 実機で日付グリッドが表示される |
+| M1 | 接続・一覧・サムネイル | 実機で日付グリッドが表示される（**実装済み・実機確認待ち**） |
 | M2 | プレビュー・選択・ダウンロード・取込済み管理 | **MVP 完了** |
 | M3 | GPX 読み込み・マッチングの dry run 表示 | 地図上で付与予定位置が確認できる |
 | M4 | ジオタグ書き込み（JPEG EXIF / XMP サイドカー） | |
@@ -369,6 +369,18 @@ ObjectInfo を 1 件ずつ取ると、1659 件で約 35 秒かかる。M1 では
 - ObjectInfo の日時は EXIF の撮影時刻と一致しないことがある。ジオタグには必ず EXIF の `DateTimeOriginal` + `OffsetTimeOriginal` を使う
 
 ## 12. 実装メモ
+
+### M1
+
+- 一覧は `CameraCatalog`（`:core:camera`）。ObjectInfo を新しい順に取得し、40 件ごとに Shot の一覧を流す
+- ObjectInfo のキャッシュは `FileObjectInfoStore`（アプリの files/object-info/ に JSON）。
+  再接続時は 8 件を抜き取って取り直し、すべて一致すればキャッシュを使って新しいハンドルだけ取る。
+  1 件でも違えば（カード入れ替え・削除でハンドルの対応がずれた）全件取り直す
+- サムネイルは Coil 3 のカスタム Fetcher（`PtpThumbnailFetcher`）。キャッシュキーは `StableObjectId`。
+  Coil はカスタム Fetcher の結果をディスクに書かないので、Fetcher 内でディスクキャッシュを読み書きする
+- PTP の直列化は `FrameworkPtpClient` の単一スレッドに任せている（FIFO）。
+  スクロールで見えなくなったサムネイル要求は、実行前にキャンセルされれば PTP に流れない
+- 画面遷移は navigation-compose（一覧 → 診断）
 
 - パッケージ名（applicationId）: `io.github.kaitosiba.fujiptp`
 - M0 の診断は `DiagnosticsRunner`（`:core:ptp`）にまとめた。実機とデモで同じコードが動く

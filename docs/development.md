@@ -35,10 +35,10 @@ Android Studio の AGP Upgrade Assistant が更新を提案してきたら、適
 
 | モジュール | 種別 | 内容 |
 |---|---|---|
-| `:app` | Android app | 画面（M0 は診断画面のみ）、接続管理、USB 接続時の自動起動 |
+| `:app` | Android app | 画面（写真一覧、診断）、接続管理、サムネイル取得（Coil）、USB 接続時の自動起動 |
 | `:core:ptp` | Kotlin/JVM | `PtpClient` インターフェース、PTP コード表、ダンプ形式、`FakePtpClient`、`DiagnosticsRunner` |
 | `:core:ptp-android` | Android library | `android.mtp.MtpDevice` を使った `FrameworkPtpClient`、USB 権限・接続（`UsbCameraConnector`） |
-| `:core:camera` | Kotlin/JVM | `CameraProfile`、`ProfileRegistry`、各機種プロファイル、`Shot` へのグルーピング |
+| `:core:camera` | Kotlin/JVM | `CameraProfile`、`ProfileRegistry`、各機種プロファイル、`Shot` へのグルーピング、写真一覧 `CameraCatalog` と ObjectInfo キャッシュ |
 
 `:core:ptp` と `:core:camera` は Android に依存しないので、JVM のユニットテストだけで検証できる。
 

@@ -1,21 +1,48 @@
 package io.github.kaitosiba.fujiptp
 
 import android.app.Application
+import coil3.ImageLoader
+import coil3.PlatformContext
+import coil3.SingletonImageLoader
+import coil3.disk.DiskCache
 import io.github.kaitosiba.fujiptp.camera.ProfileRegistry
+import io.github.kaitosiba.fujiptp.catalog.CatalogManager
 import io.github.kaitosiba.fujiptp.connection.CameraConnectionManager
+import io.github.kaitosiba.fujiptp.thumbnail.PtpThumbnailFetcher
+import io.github.kaitosiba.fujiptp.thumbnail.PtpThumbnailKeyer
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import okio.Path.Companion.toOkioPath
 
-class FujiPtpApp : Application() {
+class FujiPtpApp : Application(), SingletonImageLoader.Factory {
 
-    /** M0 では手動 DI。画面と依存が増える M1 で Hilt に置き換える。 */
+    /** 手動 DI。依存がまだ少ないので Hilt は画面と依存がもっと増えた時点で導入する。 */
     lateinit var container: AppContainer
         private set
 
     override fun onCreate() {
         super.onCreate()
         container = AppContainer(this)
+    }
+
+    override fun newImageLoader(context: PlatformContext): ImageLoader =
+        ImageLoader.Builder(context)
+            .components {
+                add(PtpThumbnailKeyer())
+                add(PtpThumbnailFetcher.Factory { container.catalogManager.active.value?.session?.client })
+            }
+            .diskCache {
+                DiskCache.Builder()
+                    .directory(cacheDir.resolve("thumbnails").toOkioPath())
+                    .maxSizeBytes(THUMBNAIL_CACHE_BYTES)
+                    .build()
+            }
+            .build()
+
+    private companion object {
+        /** サムネイル 1 枚 5〜10 KB なので、数万枚分 */
+        const val THUMBNAIL_CACHE_BYTES = 256L * 1024 * 1024
     }
 }
 
@@ -24,4 +51,5 @@ class AppContainer(app: Application) {
     val profileRegistry: ProfileRegistry = ProfileRegistry.default()
     val connectionManager: CameraConnectionManager =
         CameraConnectionManager(app, profileRegistry, applicationScope)
+    val catalogManager: CatalogManager = CatalogManager(app, connectionManager, applicationScope)
 }
