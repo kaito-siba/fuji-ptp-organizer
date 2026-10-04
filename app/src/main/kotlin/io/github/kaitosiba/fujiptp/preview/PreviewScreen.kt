@@ -12,7 +12,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -91,6 +95,11 @@ fun PreviewScreen(viewModel: BrowserViewModel, onBack: () -> Unit) {
     FollowDeviceRotation()
     ImmersiveMode(enabled = !overlayVisible)
 
+    // システムバーの高さを常に読み続ける。Compose はこれを読む部品が 1 つもなくなると高さの追跡をやめるため、
+    // 情報表示（ここで高さを使う唯一の部品）を消した状態でシステムバーを隠すと、隠れる途中の値（0）のまま
+    // 追跡が止まり、表示を戻しても他の画面に戻っても上のバーがステータスバーに重なってしまう。
+    val systemBars = WindowInsets.systemBars
+
     Box(
         Modifier
             .fillMaxSize()
@@ -114,6 +123,7 @@ fun PreviewScreen(viewModel: BrowserViewModel, onBack: () -> Unit) {
         ) {
             val buttonColors = ButtonDefaults.textButtonColors(contentColor = Color.White)
             TopAppBar(
+                windowInsets = systemBars.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal),
                 title = { Text(current?.shot?.primary?.info?.name ?: "") },
                 navigationIcon = { TextButton(onClick = onBack, colors = buttonColors) { Text("戻る") } },
                 actions = {
@@ -136,7 +146,7 @@ fun PreviewScreen(viewModel: BrowserViewModel, onBack: () -> Unit) {
             exit = fadeOut(),
             modifier = Modifier.align(Alignment.BottomCenter),
         ) {
-            current?.let { InfoPanel(it) }
+            current?.let { InfoPanel(it, systemBars.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal)) }
         }
     }
 
@@ -195,12 +205,12 @@ private fun PreviewPage(item: ShotItem, zoom: ZoomState, onTap: () -> Unit) {
 private val timeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
 
 @Composable
-private fun InfoPanel(item: ShotItem) {
+private fun InfoPanel(item: ShotItem, insets: WindowInsets) {
     Column(
         Modifier
             .fillMaxWidth()
             .background(Color.Black.copy(alpha = OVERLAY_ALPHA))
-            .navigationBarsPadding()
+            .windowInsetsPadding(insets)
             .padding(horizontal = 16.dp, vertical = 8.dp),
     ) {
         val members = item.shot.members.joinToString("  ") { "${it.info.name} (${formatBytes(it.info.compressedSize)})" }
