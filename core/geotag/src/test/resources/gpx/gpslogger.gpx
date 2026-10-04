@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSLogger 131 - http://gpslogger.mendhak.com/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/0" xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>2026-09-30T16:59:00.000Z</time>
+<trk><name>20260930</name><trkseg>
+<trkpt lat="49.282700" lon="-123.120700"><ele>10.0</ele><time>2026-09-30T17:00:00.000Z</time><course>12.3</course><speed>1.2</speed><src>gps</src><sat>9</sat><hdop>0.8</hdop></trkpt>
+<trkpt lat="49.283700" lon="-123.118700"><ele>14.0</ele><time>2026-09-30T17:01:00.000Z</time><src>gps</src></trkpt>
+<trkpt lat="49.284700" lon="-123.116700"><ele>18.0</ele><time>2026-09-30T17:02:00Z</time></trkpt>
+<trkpt lat="49.300000" lon="-123.100000"><time>2026-09-30T17:30:00+00:00</time></trkpt>
+<trkpt lat="49.000000" lon="-123.000000"><ele>1.0</ele></trkpt>
+</trkseg></trk>
+</gpx>

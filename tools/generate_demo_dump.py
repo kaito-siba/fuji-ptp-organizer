@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """エミュレータのデモモード用に、X100VI を模した DeviceDump JSON を生成する。
 
-サムネイルは ImageMagick (convert) で生成する。値はすべて架空で、実機の挙動とは一致しない。
-実機の診断ダンプが取れたら、それで置き換えてよい。
+サムネイルは ImageMagick (convert) で生成する。ファイル一覧は架空だが、形式コード・対応オペレーション・
+USB 記述子などは実機ダンプ（fixtures/dumps/x100vi-fw132.json, FW1.32）に合わせてある。
 
 usage: python3 tools/generate_demo_dump.py
 """
@@ -16,14 +16,17 @@ import tempfile
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT = ROOT / "app/src/main/assets/demo/x100vi-demo.json"
 
-STORAGE = 0x00010001
+STORAGE = 0x10000001
 FMT_ASSOCIATION = 0x3001
 FMT_JPEG = 0x3801
 FMT_QUICKTIME = 0x300D
-FMT_UNDEFINED = 0x3000  # RAF / HIF の実際のコードは未確認なので Undefined にしておく
+FMT_RAF = 0xB103
+FMT_UNDEFINED = 0x3000  # HIF の実際のコードは未確認なので Undefined にしておく
 
 OPERATIONS = [0x1001, 0x1002, 0x1003, 0x1004, 0x1005, 0x1006, 0x1007, 0x1008,
-              0x1009, 0x100A, 0x100B, 0x1014, 0x1015, 0x1016, 0x101B]
+              0x1009, 0x100A, 0x100B, 0x100C, 0x100D, 0x100F, 0x1014, 0x1015,
+              0x1016, 0x101B, 0x900C, 0x900D, 0x901D, 0x9801, 0x9802, 0x9803, 0x9805]
+EVENTS = [0x4002, 0x4003, 0x4004, 0x4005, 0x4006, 0x4008, 0x4009]
 COLORS = ["#c0392b", "#d35400", "#27ae60", "#2980b9", "#8e44ad", "#2c3e50"]
 
 
@@ -43,15 +46,19 @@ def ms(dt: datetime.datetime) -> int:
 
 
 def obj(handle, name, fmt, parent, size, created):
+    is_file = fmt != FMT_ASSOCIATION
+    is_image = fmt in (FMT_JPEG, FMT_RAF, FMT_UNDEFINED)
     return {
         "handle": handle, "storageId": STORAGE, "format": fmt, "compressedSize": size,
-        "thumbFormat": FMT_JPEG if fmt != FMT_ASSOCIATION else 0,
-        "thumbPixWidth": 160 if fmt != FMT_ASSOCIATION else 0,
-        "thumbPixHeight": 120 if fmt != FMT_ASSOCIATION else 0,
-        "imagePixWidth": 7728 if fmt in (FMT_JPEG, FMT_UNDEFINED) else 0,
-        "imagePixHeight": 5152 if fmt in (FMT_JPEG, FMT_UNDEFINED) else 0,
+        "thumbFormat": 0x3808 if is_file else 0,  # 実機は JFIF を返す
+        "thumbPixWidth": 160 if is_file else 0,
+        "thumbPixHeight": 120 if is_file else 0,
+        "imagePixWidth": 7728 if is_image else 0,
+        "imagePixHeight": 5152 if is_image else 0,
         "parent": parent, "name": name,
         "dateCreatedMillis": ms(created), "dateModifiedMillis": ms(created),
+        # Fujifilm は Keywords にカメラ時計の日時文字列を入れてくる
+        "keywords": created.strftime("%Y%m%dT%H%M%S"),
     }
 
 
@@ -72,7 +79,7 @@ def main():
         else:
             files.append((f"{stem}.JPG", FMT_JPEG, 14_500_000))
         if i % 3 == 0:
-            files.append((f"{stem}.RAF", FMT_UNDEFINED, 41_000_000))
+            files.append((f"{stem}.RAF", FMT_RAF, 86_000_000))
         if i in (17, 33):
             files = [(f"{stem}.MOV", FMT_QUICKTIME, 350_000_000)]
         for name, fmt, size in files:
@@ -83,8 +90,8 @@ def main():
                                "size": 0, "base64": thumbnail(stem, color)})
             handle += 1
 
-    # RAF / HIF（Undefined 形式）と動画のフォールバックサムネイル
-    for fmt, label in ((FMT_UNDEFINED, "RAW/HEIF"), (FMT_QUICKTIME, "MOVIE")):
+    # RAF / HIF のフォールバックサムネイル（動画は実機でも GetThumb が失敗するので用意しない）
+    for fmt, label in ((FMT_RAF, "RAF"), (FMT_UNDEFINED, "HEIF")):
         first = next(o for o in objects if o["format"] == fmt)
         thumbs.append({"handle": first["handle"], "objectFormat": fmt, "fileName": first["name"],
                        "size": 0, "base64": thumbnail(label, "#7f8c8d")})
@@ -95,15 +102,18 @@ def main():
         "schemaVersion": 1,
         "createdAt": base.isoformat(),
         "source": "demo",
-        "usb": {"vendorId": 0x04CB, "productId": 0x0000, "manufacturerName": "FUJIFILM",
-                "productName": "X100VI (demo)", "interfaces": [
+        "usb": {"vendorId": 0x04CB, "productId": 0x0305, "productName": "USB PTP Camera",
+                "version": "1.32", "interfaces": [
                     {"id": 0, "alternateSetting": 0, "interfaceClass": 6, "interfaceSubclass": 1,
-                     "interfaceProtocol": 1, "endpoints": []}]},
+                     "interfaceProtocol": 1, "endpoints": [
+                         {"address": 0x01, "type": 2, "direction": 0, "maxPacketSize": 512, "interval": 1},
+                         {"address": 0x81, "type": 2, "direction": 128, "maxPacketSize": 512, "interval": 0},
+                         {"address": 0x82, "type": 3, "direction": 128, "maxPacketSize": 32, "interval": 11}]}]},
         "deviceInfo": {"manufacturer": "FUJIFILM", "model": "X100VI", "version": "demo",
                        "serialNumber": "DEMO-0000", "operationsSupported": OPERATIONS,
-                       "eventsSupported": [0x4002, 0x4003, 0x4004, 0x4005]},
+                       "eventsSupported": EVENTS},
         "storages": [{
-            "info": {"storageId": STORAGE, "description": "SD (demo)", "volumeIdentifier": None,
+            "info": {"storageId": STORAGE, "description": "External Memory (demo)", "volumeIdentifier": None,
                      "maxCapacity": 128 * 1024 ** 3, "freeSpace": 96 * 1024 ** 3},
             "handleCountAll": len(objects), "handleCountRoot": 1,
             "objects": objects, "objectsTruncated": False,
